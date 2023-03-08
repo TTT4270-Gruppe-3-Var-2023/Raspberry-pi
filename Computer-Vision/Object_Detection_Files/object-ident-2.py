@@ -1,6 +1,19 @@
 import cv2
+import numpy as np
 
-#thres = 0.45 # Threshold to detect object
+'''
+UART communication on Raspberry Pi using Pyhton
+http://www.electronicwings.com
+'''
+import serial
+from time import sleep
+
+ser = serial.Serial ("/dev/ttyS0", 9600)    #Open port with baud rate
+
+'''
+Computer vision
+'''
+thres = 0.45 # Threshold to detect object
 
 classNames = []
 classFile = "/home/pi/Desktop/Object_Detection_Files/coco.names"
@@ -23,7 +36,7 @@ def getObjects(img, thres, nms, draw=True, objects=[]):
     if len(objects) == 0: objects = classNames
     objectInfo =[]
     if len(classIds) != 0:
-        print(len(classIds))
+        # print(len(classIds))
         for classId, confidence,box in zip(classIds.flatten(),confs.flatten(),bbox):
             className = classNames[classId - 1]
             if className in objects:
@@ -48,10 +61,16 @@ if __name__ == "__main__":
 
 
     while True:
-        success, img = cap.read()
-        result, objectInfo = getObjects(img,0.50,0.2, objects=['person'])
-        #print(objectInfo)
-        peopleCount = len(objectInfo)
-        print(peopleCount)
-        # cv2.imshow("Output",img)
-        cv2.waitKey(1)
+        arrPersons = []
+        for i in range(0,10):
+            success, img = cap.read()
+            result, objectInfo = getObjects(img,0.50,0.2, objects=['person'])
+            #print(objectInfo)
+            arrPersons.append(peopleCount)
+            # peopleCount = len(objectInfo)
+            # print(peopleCount)
+            # cv2.imshow("Output",img)
+            cv2.waitKey(1)
+        averageNumPersons = "\n"+ str(round(np.mean(arrPersons)))
+        UARTdata= bytes(averageNumPersons, 'utf-8')
+        ser.write(UARTdata)
