@@ -48,6 +48,7 @@ def getObjects(img, thres, nms, draw=True, objects=[]):
                     cv2.putText(img,str(round(confidence*100,2)),(box[0]+200,box[1]+30),
                     cv2.FONT_HERSHEY_COMPLEX,1,(0,255,0),2)
     else:
+        
         print("no person found")
     return img,objectInfo
 
@@ -62,19 +63,19 @@ if __name__ == "__main__":
 
     while True:
         arrPersons = []
-        for i in range(0,10):
+        for i in range(0,15):
             success, img = cap.read()
             result, objectInfo = getObjects(img,0.50,0.2, objects=['person'])
             #print(objectInfo)
             peopleCount = len(objectInfo)
             arrPersons.append(peopleCount)
             # print(peopleCount)
-            numPersons = "\nCurrent person count: "+ str(round(np.mean(arrPersons)))
-            UARTdata= bytes(numPersons, 'utf-8')
-            ser.write(UARTdata)
+            # numPersons = "\nCurrent person count: "+ str(round(np.mean(arrPersons)))
+            # UARTdata= bytes(numPersons, 'utf-8')
+            # ser.write(UARTdata)
             # cv2.imshow("Output",img)
             cv2.waitKey(1)
-        averageNumPersons ="\nMean: "+ str(round(np.mean(arrPersons))) + "\n"+"-"*30+"\n"
+        meanPersons = str(np.mean(arrPersons))
         UARTdata= bytes(averageNumPersons, 'utf-8')
         ser.write(UARTdata)
 
