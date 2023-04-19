@@ -76,6 +76,6 @@ if __name__ == "__main__":
             # cv2.imshow("Output",img)
             cv2.waitKey(1)
         meanPersons = str(np.mean(arrPersons))
-        UARTdata= bytes(averageNumPersons, 'utf-8')
+        UARTdata= bytes(meanPersons, 'utf-8')
         ser.write(UARTdata)
 
