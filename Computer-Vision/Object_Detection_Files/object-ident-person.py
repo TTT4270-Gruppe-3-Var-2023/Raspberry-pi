@@ -13,7 +13,7 @@ ser = serial.Serial ("/dev/ttyS0", 9600)    #Open port with baud rate
 '''
 Computer vision
 '''
-thres = 0.45 # Threshold to detect object
+thres = 0.4 # Threshold to detect object
 
 classNames = []
 classFile = "/home/pi/Desktop/Object_Detection_Files/coco.names"
@@ -66,14 +66,8 @@ if __name__ == "__main__":
         for i in range(0,15):
             success, img = cap.read()
             result, objectInfo = getObjects(img,0.50,0.2, objects=['person'])
-            #print(objectInfo)
             peopleCount = len(objectInfo)
             arrPersons.append(peopleCount)
-            # print(peopleCount)
-            # numPersons = "\nCurrent person count: "+ str(round(np.mean(arrPersons)))
-            # UARTdata= bytes(numPersons, 'utf-8')
-            # ser.write(UARTdata)
-            # cv2.imshow("Output",img)
             cv2.waitKey(1)
         meanPersons = str(np.mean(arrPersons))
         UARTdata= bytes(meanPersons, 'utf-8')
